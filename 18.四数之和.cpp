@@ -9,35 +9,35 @@
  *
  * [18] 四数之和
  */
+#include <algorithm>
 #include <vector>
 #include <unordered_map>
+
 using namespace std;
 // @lc code=start
 class Solution {
 public:
     vector<vector<int>> fourSum(vector<int>& nums, int target) {
-        unordered_map<int,int> hashmap;
         vector<vector<int>> ans;
-        for(int i = 0; i < nums.size(); i++){
-            hashmap[nums[i]] = i;
-        }
-        for(int i = 0; i < nums.size()-2 ; i++){
-            for(int j = i+1 ; j < nums.size()-1; j++){
-                for(int k = j + 1; k < nums.size(); k++ ){
-                    auto ptr = hashmap.find(target - nums[i] -nums[j] -nums[k]);
-                    if( ptr != hashmap.end() && ptr->second > i 
-                        && ptr->second > j && ptr->second > k){
-                        vector<int> v;
-                        v.push_back(nums[i]);
-                        v.push_back(nums[j]);
-                        v.push_back(nums[k]);
-                        v.push_back(ptr->first);
-                        ans.push_back(v);
+        sort(nums.begin(), nums.end());
+        for(auto i = nums.begin() ; i < nums.end() - 3 ; ++i){
+            vector<int> temp = nums;
+            int t = target - *i;
+            temp.erase(i);
+            for(int j = 0 ; j < temp.size() - 2 ; ++j){
+                int left = j + 1; int right  = nums.size() - 1;
+                while (left < right) {
+                    if(t - nums[j] == nums[left] + nums[right]){
+                        ans.emplace_back(vector<int> {*i ,j , left , right});
+                    }else if(t - nums[j] < nums[left] + nums[right]){
+                        ++left;
+                    }else{
+                        --right;
                     }
                 }
             }
         }
-        return ans; 
+        return ans;
     }
 };
 // @lc code=end
