@@ -10,23 +10,25 @@
  * [509] 斐波那契数
  */
 
+// 利用动态规划接一下
+
 // @lc code=start
 class Solution {
 public:
     int fib(int n) {
-        if(n < 2){
+        if( n < 2){
             return n;
         }
-        int pre = 0 ; 
-        int cur = 1; 
-        int nex = pre + cur;
-        while(n >= 2){
-            pre = cur;
-            cur = nex;
-            nex = pre + cur;
-            n--;
+        int dp [2];
+        dp[0] = 0;
+        dp[1] = 1;
+        int res;
+        for(int i = 2 ; i <= n ; ++i){
+            int sum = dp[0] + dp[1];
+            dp[0] = dp[1];
+            dp[1] = sum;
         }
-        return cur;
+        return dp[1];
     }
 };
 // @lc code=end
