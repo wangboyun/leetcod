@@ -7,12 +7,36 @@
 /// 动态规划解决此问题
 
 #include <vector>
+#include <stack>
 using namespace std;
 
 // @lc code=start
 class Solution {
 public:
+    /// 单调栈做
     int trap(vector<int>& height) {
+        stack<int> st;
+        st.push(0);
+        int sum = 0;
+        for(int i = 1; i < height.size(); ++i){
+            while(!st.empty() && height[i] > height[st.top()]){
+                int mid = st.top();
+                st.pop();
+                if(!st.empty()){
+                    int h = min(height[i], height[st.top()]) - height[mid];
+                    int w = i - st.top() - 1;
+                    sum += h * w;
+                }
+            }
+            st.push(i);
+        }
+        return sum;
+    }
+};
+// @lc code=end
+
+///dp 动态规划做的
+int trap(vector<int>& height) {
         vector<int> leftmax(height.size() , 0);
         vector<int> rightmax(height.size(), 0);
         int size = height.size();
@@ -36,6 +60,3 @@ public:
         }
         return sum;
     }
-};
-// @lc code=end
-
