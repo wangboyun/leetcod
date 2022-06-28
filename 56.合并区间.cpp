@@ -9,14 +9,42 @@
  *
  * [56] 合并区间
  */
-#include <cstdlib>
+#include <algorithm>
 #include <vector>
 
 using namespace std;
 // @lc code=start
 class Solution {
 public:
-    void quicksort(vector<vector<int>>& nums,int left , int right){
+    /// 贪心算法
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        vector<vector<int>> res;
+        sort(intervals.begin() , intervals.end(), [](const vector<int>& a, const vector<int>& b){
+            return a[0] < b[0];
+        });
+        int len = intervals.size();
+        bool last = false;
+        for(int i = 1; i < len ; ++i){
+            int start = intervals[i-1][0];
+            int end = intervals[i-1][1];
+            while( i < len && intervals[i][0] <= end){
+                end = max(end , intervals[i][1]);
+                if (i == len - 1){
+                    last = true;
+                }
+                ++i;    
+            }
+            res.emplace_back(vector<int>{start , end});
+        }
+        if(last == false){
+            res.emplace_back(vector<int>{intervals[len - 1][0] , intervals[len - 1][1] });
+        }
+        return res;
+    }
+};
+// @lc code=end
+
+void quicksort(vector<vector<int>>& nums,int left , int right){
         if(left >= right)
             return;
         int i = left; int j = right;
@@ -73,6 +101,3 @@ public:
         
         return ans;
     }
-};
-// @lc code=end
-
